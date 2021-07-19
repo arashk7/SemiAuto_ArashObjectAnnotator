@@ -32,7 +32,9 @@ if btn_inputdir:
 
     ss.file_list = glob.glob(dir_in + "/*.jpg")
 
-btn_dr_mode = st.radio('Drawing mode:', ('rect', 'transform'))
+col1, col2 = st.beta_columns(2)
+btn_dr_mode = col1.radio('Drawing mode:', ('rect', 'transform'))
+btn_class = col2.radio('Selected class:', ('person','forklift'))
 # print(ss.file_list[ss.counter])
 bg_image = cv2.imread(ss.file_list[ss.counter])
 basename = os.path.basename(os.path.normpath(ss.file_list[ss.counter]))
@@ -55,7 +57,7 @@ if os.path.isfile('json/' + file_name + '.json'):
 else:
     print('clear')
     if ss.clear:
-        json_all = {'version': '4.4.0', 'objects': [{'type': 'rect', 'version': '4.4.0', 'originX': 'left', 'originY': 'top', 'left': 1, 'top': 1, 'width': 1, 'height': 1, 'fill': 'rgba(255, 165, 0, 0.3)', 'stroke': '#000000', 'strokeWidth': 3, 'strokeDashArray': None, 'strokeLineCap': 'butt', 'strokeDashOffset': 0, 'strokeLineJoin': 'miter', 'strokeUniform': True, 'strokeMiterLimit': 4, 'scaleX': 1, 'scaleY': 1, 'angle': 0, 'flipX': False, 'flipY': False, 'opacity': 1, 'shadow': None, 'visible': True, 'backgroundColor': '', 'fillRule': 'nonzero', 'paintFirst': 'fill', 'globalCompositeOperation': 'source-over', 'skewX': 0, 'skewY': 0, 'rx': 0, 'ry': 0}], 'background': '#eee'}
+        json_all = {'version': '4.4.0', 'objects': [{'type': 'rect', 'version': '4.4.0', 'originX': 'left', 'originY': 'top', 'left': 1, 'top': 1, 'width': 1, 'height': 1, 'fill': 'rgba(255, 165, 0, 0.3)', 'stroke': '#000000', 'strokeWidth': 3, 'strokeDashArray': None, 'strokeLineCap': 'butt', 'strokeDashOffset': 0, 'strokeLineJoin': 'miter', 'strokeUniform': True, 'strokeMiterLimit': 4, 'scaleX': 1, 'scaleY': 1, 'angle': 0, 'flipX': False, 'flipY': False, 'opacity': 1, 'shadow': None, 'visible': True, 'backgroundColor': '', 'fillRule': 'nonzero', 'paintFirst': 'fill', 'globalCompositeOperation': 'source-over', 'skewX': 0, 'skewY': 0, 'rx': 0, 'ry': 0,'class':'person'}], 'background': '#eee'}
         ss.clear=False
         st.experimental_rerun()
     else:
@@ -64,9 +66,14 @@ else:
         # json_all['objects'] = None
 
 print(json_all)
+fill_color= "rgba(255, 0, 0, 0.3)"
+if btn_class=='person':
+    fill_color = "rgba(0, 255, 0, 0.3)"
+def color_to_class(color_str):
+    
 
 canvas_result = st_canvas(
-    fill_color="rgba(255, 100, 0, 0.3)",  # Fixed fill color with some opacity
+    fill_color=fill_color,  # Fixed fill color with some opacity
     stroke_width=stroke_width,
     stroke_color=stroke_color,
     background_color=bg_color,
